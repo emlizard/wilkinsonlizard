@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>N-Way Wilkinson Power Divider</title>
-  <!-- MathJax for rendering equations -->
+  <title>2-Way Unequal-Power Wilkinson Divider</title>
+  <!-- MathJax for rendering formulas -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -13,63 +13,43 @@
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
-      line-height: 1.6;
       color: #333;
     }
-    h1, h2, h3 {
+    h1 {
+      text-align: center;
       color: #2c3e50;
-      margin-bottom: 10px;
     }
     .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .diagram-container {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .diagram-container img {
-      max-width: 100%;
-      height: auto;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .formula-box {
+      max-width: 600px;
+      margin: 20px auto;
       background: #fafafa;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 6px;
       padding: 20px;
-      margin-top: 30px;
-    }
-    .formula-box h2 {
-      margin-top: 0;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
-      font-size: 1.2em;
-    }
-    .formula-box p {
-      margin: 12px 0;
-      font-size: 1em;
-    }
-    /* Adjust labels so they do not wrap */
-    label {
-      display: inline-block;
-      width: auto;             /* allow labels to size to their content */
-      white-space: nowrap;     /* prevent wrapping */
-      font-weight: 500;
-      margin-right: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     .input-group {
-      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
     }
-    input[type="number"], select {
-      width: 100px;
-      padding: 5px;
+    .input-group label {
+      flex: 0 0 180px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .input-group input {
+      flex: 1;
+      padding: 6px;
+      font-size: 14px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
       text-align: right;
     }
     button {
-      padding: 8px 16px;
-      font-size: 14px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
       background: #1abc9c;
       color: white;
       border: none;
@@ -77,310 +57,119 @@
       cursor: pointer;
       margin-top: 10px;
     }
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
+    button:hover { background: #15947a; }
+    .results {
+      margin-top: 20px;
+      font-size: 15px;
+    }
+    .results p {
+      margin: 8px 0;
+    }
+    .formula-box {
+      margin-top: 30px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      padding: 15px;
+    }
+    .formula-box h2 {
+      margin-top: 0;
+      font-size: 1.1em;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 6px;
+    }
+    .formula-box code {
+      background: #f0f0f0;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: Consolas, monospace;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>N-Way Cascaded Wilkinson Power Divider</h1>
-
-    <!-- Diagram Section -->
-    <div class="diagram-container">
-      <img src="sandbox:/mnt/data/A_schematic_diagram_of_a_power_divider_displays_a_.png"
-           alt="4-Way Wilkinson Power Divider Schematic"/>
-      <p style="font-size: 0.9em; color: #666; margin-top: 5px;">
-        Figure: 4-way divider formed by cascading two 2-way Wilkinson dividers. Each quarter-wavelength
-        section is 0.25λ long. Isolation resistors (R) connect between adjacent branches to maintain isolation.
-      </p>
-    </div>
-
-    <!-- Example Input Section: Selecting Number of Outputs and Power Ratios -->
+    <h1>2-Way Unequal Wilkinson Power Divider</h1>
+    <img src="https://emlizard.github.io/main-page/images/diagram_wilkinson3.png"
+     alt="Wilkinson power divider schematic"
+     style="max-width:100%;height:auto;">
     <div class="input-group">
-      <label for="numOutputs">Number of Outputs (N):</label>
-      <select id="numOutputs">
-        <option value="2">2-Way</option>
-        <option value="4" selected>4-Way</option>
-        <option value="8">8-Way</option>
-      </select>
+      <label for="Z0">System Impedance \(Z_0\) [Ω]:</label>
+      <input type="number" id="Z0" step="any" value="50">
     </div>
-    <div id="powerRatiosContainer">
-      <!-- For N = 4, show four power-ratio inputs -->
-      <div class="input-group">
-        <label for="p1">Power Ratio P₁ (W):</label>
-        <input type="number" id="p1" step="any" value="1.0">
-      </div>
-      <div class="input-group">
-        <label for="p2">Power Ratio P₂ (W):</label>
-        <input type="number" id="p2" step="any" value="1.0">
-      </div>
-      <div class="input-group">
-        <label for="p3">Power Ratio P₃ (W):</label>
-        <input type="number" id="p3" step="any" value="1.0">
-      </div>
-      <div class="input-group">
-        <label for="p4">Power Ratio P₄ (W):</label>
-        <input type="number" id="p4" step="any" value="1.0">
-      </div>
+    <div class="input-group">
+      <label for="P1">Power Fraction \(P_1\) (port-1):</label>
+      <input type="number" id="P1" step="any" value="0.5" min="0" max="1">
     </div>
-    <button onclick="computeDivider()">Compute Divider</button>
+    <div class="input-group">
+      <label for="P2">Power Fraction \(P_2\) (port-2):</label>
+      <input type="number" id="P2" step="any" value="0.5" min="0" max="1">
+    </div>
 
-    <!-- Results Section -->
-    <div id="results" style="margin-top: 20px;"></div>
+    <button onclick="compute2Way()">Compute Divider</button>
 
-    <!-- Formulas Section -->
-    <div class="formula-box" id="formulas">
-      <h2>Formulas Used (MathJax)</h2>
+    <div class="results" id="results"></div>
+
+    <div class="formula-box">
+      <h2>Formulas Used</h2>
+      <p>Let the unequal split ratio be
+      \[
+        r \;=\;\frac{P_1}{P_2},\quad
+        Z_{0,\mathrm{eff}} \;=\;\sqrt{Z_0 \,\cdot\, Z_0}\;=\;Z_0.
+      \]</p>
       <p>
-        For a 2-way unequal Wilkinson divider (power ratio between ports 2 and 3 given by \(K^2 = \frac{P_3}{P_2}\)):
-      </p>
-      <p>
-        \[
-          Z_{3} \;=\; Z_{0}\,\sqrt{\frac{1 + K^2}{\,K^3\,}}
-        \]
-      </p>
-      <p>
-        \[
-          Z_{2} \;=\; Z_{0}\,K^2 \,Z_{3}
-              \;=\; Z_{0}\,K\sqrt{1 + K^2}
-        \]
-      </p>
-      <p>
-        \[
-          R \;=\; Z_{0}\,\Bigl(K + \tfrac{1}{K}\Bigr)
-        \]
-      </p>
-      <hr>
-      <p>
-        <strong>General Cascaded (N-Way) Divider (N even):</strong><br>
-        Start from the last stage (smallest 2-way):
-      </p>
-      <p>
-        Let \(Z_{0,\text{input}}\) be the characteristic impedance of the previous stage branch.
-        If the power ratio at that stage is \(K^2 = \tfrac{P_{\text{lower}}}{P_{\text{upper}}}\), then
-      </p>
-      <p>
-        \[
-          Z_{3,\text{stage}} \;=\; Z_{0,\text{input}} \,\sqrt{\frac{\,1 + K^2\,}{\,K^3\,}},
-        \quad
-          Z_{2,\text{stage}} \;=\; Z_{0,\text{input}}\,K^2\,Z_{3,\text{stage}}
-                        \;=\; Z_{0,\text{input}}\,K\,\sqrt{1 + K^2},
+      \[
+        Z_1 \;=\; Z_{0,\mathrm{eff}}\,
+          \sqrt{\,r^{-1.5} + r^{-0.5}\,},
       \]
       \[
-          R_{\text{stage}} \;=\; Z_{0,\text{input}}\,\Bigl(K + \tfrac{1}{\,K\,}\Bigr).
+        Z_2 \;=\; Z_{0,\mathrm{eff}}\,
+          \sqrt{1 + r}\;\,r^{0.25},
       \]
-      </p>
-      <p>
-        Each branch’s input impedance for that 2-way stage is either \(Z_{2,\text{stage}}\) or \(Z_{3,\text{stage}}\), depending on
-        which side leads to further splitting.  Cascading proceeds “backwards” (from final outputs toward the primary input).
-      </p>
-      <hr>
-      <p>
-        <strong>Example for 4-Way (two stages):</strong><br>
-        1) First split: power ratios \(\{P_1,P_{234}\}\).  Compute \(K_1^2 = \tfrac{P_{234}}{\,P_1\,}\), then<br>
-        \[
-          Z_{3,\,\text{stage1}} = Z_0 \sqrt{\frac{1 + K_1^2}{\,K_1^3\,}}, \quad
-          Z_{2,\,\text{stage1}} = Z_0\,K_1 \sqrt{1 + K_1^2}, \quad
-          R_{1} = Z_0 \Bigl(K_1 + \tfrac{1}{K_1}\Bigr).
-        \]
-        2) Within branch \(P_{234}\), second split: power ratios \(\{P_2,P_{34}\}\) (use \(Z_{0,\text{input}} = Z_{3,\,\text{stage1}}\)).  Compute
-        \(K_2^2 = \tfrac{P_{34}}{\,P_2\,}\), then
-      </p>
-      <p>
-        \[
-          Z_{3,\,\text{stage2}} = Z_{3,\,\text{stage1}} \;\sqrt{\frac{\,1 + K_2^2\,}{\,K_2^3\,}}, \quad
-          Z_{2,\,\text{stage2}} = Z_{3,\,\text{stage1}} \;K_2\,\sqrt{1 + K_2^2}, \quad
-          R_{2} = Z_{3,\,\text{stage1}}\Bigl(K_2 + \tfrac{1}{K_2}\Bigr).
-        \]
-      </p>
-      <p>
-        3) Finally, for branch \(P_{34}\) → split into \(\{P_3,P_4\}\) with \(Z_{0,\text{input}}=Z_{3,\,\text{stage2}}\).  Compute
-        \(K_3^2 = \tfrac{P_4}{\,P_3\,}\), then
-      </p>
-      <p>
-        \[
-          Z_{3,\,\text{stage3}} = Z_{3,\,\text{stage2}} \sqrt{\frac{1 + K_3^2}{\,K_3^3\,}}, \quad
-          Z_{2,\,\text{stage3}} = Z_{3,\,\text{stage2}} \;K_3 \sqrt{1 + K_3^2}, \quad
-          R_{3} = Z_{3,\,\text{stage2}}\Bigl(K_3 + \tfrac{1}{K_3}\Bigr).
-        \]
-      </p>
-      <p>
-        These yield the required impedances for all outputs and isolation resistors in a 4-way divider.
+      \[
+        Z_3 \;=\; Z_{0,\mathrm{eff}}\;r^{-0.25},
+      \quad
+        Z_4 \;=\; Z_{0,\mathrm{eff}}\;r^{0.25},
+      \]
+      \[
+        R_W \;=\; Z_{0,\mathrm{eff}}\,
+          \bigl(\sqrt{r} + \tfrac{1}{\sqrt{r}}\bigr).
+      \]
       </p>
     </div>
   </div>
 
   <script>
-    /**
-     * Compute and display impedances for an N-Way Wilkinson divider
-     * by cascading 2-way unequal Wilkinson stages.
-     * N must be a power of 2 (2, 4, 8, ...).
-     */
-    function computeDivider() {
-      const N = parseInt(document.getElementById('numOutputs').value, 10);
-      if ((N & (N - 1)) !== 0) {
-        document.getElementById('results').innerHTML =
-          '<p style="color:red;">Error: Number of outputs must be a power of 2 (2, 4, 8, ...).</p>';
-        return;
-      }
-
-      // Read power ratios P₁, P₂, …, Pₙ
-      const P = [];
-      for (let i = 1; i <= N; i++) {
-        const val = parseFloat(document.getElementById(`p${i}`).value);
-        if (isNaN(val) || val <= 0) {
-          document.getElementById('results').innerHTML =
-            `<p style="color:red;">Error: Invalid power ratio P${i}.</p>`;
-          return;
-        }
-        P.push(val);
-      }
-
-      // Normalize total power (sum==1) (optional)
-      const totalPower = P.reduce((sum, x) => sum + x, 0);
-      for (let i = 0; i < N; i++) {
-        P[i] /= totalPower;
-      }
-
-      // Start cascading from the last stage back to the first.
-      // We will track an array “Z_in” of impedances seen at each branch
-      // as we collapse two ports at a time.
-      // Initially, each output port “sees” Z0_ref (reference impedance, assume 50Ω).
-      const Z0 = 50;           // Reference system impedance (Ω)
-      let stageZ = Array(N).fill(Z0);
-
-      // We will collect all computed branch impedances and isolation resistors.
-      const impedanceList = [];
-      const isolationList = [];
-
-      // Function to compute 2-way stage impedances given parent Z0_in and two power ratios.
-      function compute2Way(zin, pUpper, pLower) {
-        // K^2 = P_lower / P_upper
-        const K2 = pLower / pUpper;
-        const K = Math.sqrt(K2);
-        // Compute Z3, Z2, R (Microwaves101 formulas)
-        const Z3 = zin * Math.sqrt((1 + K2) / Math.pow(K, 3));
-        const Z2 = zin * K * Math.sqrt(1 + K2);
-        const Rw = zin * (K + 1 / K);
-        return { Zupper: Z2, Zlower: Z3, Riso: Rw };
-      }
-
-      // At each cascading step, combine two adjacent branches into a single “branch”
-      // with its input impedance equal to the upper-branch impedance of that 2-way.
-      // Meanwhile record all Z2, Z3 and Rw.
-      let currentP = P.slice();
-      let currentZin = stageZ.slice();
-
-      for (let step = N; step > 1; step /= 2) {
-        const nextP = [];
-        const nextZin = [];
-
-        for (let i = 0; i < step; i += 2) {
-          const pU = currentP[i];
-          const pL = currentP[i + 1];
-          const zin_branch = currentZin[i];  
-          // Use the reference impedance of this branch (zin_branch) to compute
-          const { Zupper, Zlower, Riso } = compute2Way(zin_branch, pU, pL);
-
-          // Record:
-          impedanceList.push({
-            stage: step + "→" + (step / 2),
-            index: i / 2 + 1,
-            Z_upper: Zupper.toFixed(3),
-            Z_lower: Zlower.toFixed(3),
-            R_iso: Riso.toFixed(3)
-          });
-
-          // The combined branch “sees” Zupper (the upper-branch impedance) as its input impedance:
-          nextZin.push(Zupper);
-
-          // For the final (lowest) stage (when step == 2), we also record the absolute output impedances:
-          if (step === 2) {
-            // These are the actual Z seen looking into each output port:
-            impedanceList.push({
-              stage: "Output Port " + (i + 1),
-              index: i + 1,
-              Z_output: Zupper.toFixed(3)
-            });
-            impedanceList.push({
-              stage: "Output Port " + (i + 2),
-              index: i + 2,
-              Z_output: Zlower.toFixed(3)
-            });
-          }
-
-          nextP.push(pU + pL);
-          isolationList.push({
-            between: `Port ${i + 1} ↔ Port ${i + 2}`,
-            R_iso: Riso.toFixed(3)
-          });
-        }
-
-        currentP = nextP;
-        currentZin = nextZin;
-      }
-
-      // After cascading, currentZin[0] is the input port’s impedance Zin1.
-      const Zin1 = currentZin[0].toFixed(3);
-
-      // Display results
-      let html = `<h2>Computed Impedances (N = ${N}-Way)</h2>`;
-      html += `<p><strong>Input Port Impedance (Zin1):</strong> ${Zin1} Ω</p>`;
-      html += `<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse; width:100%; margin-top:10px;">`;
-      html += `<tr style="background:#f0f0f0;">
-                 <th>Stage</th>
-                 <th>Branch Index</th>
-                 <th>Z_upper (Ω)</th>
-                 <th>Z_lower (Ω)</th>
-                 <th>R<sub>iso</sub> (Ω)</th>
-               </tr>`;
-      impedanceList.forEach(item => {
-        // Only show Z_upper, Z_lower, R_iso rows for stages, skip the final output-only lines
-        if (item.Z_upper !== undefined) {
-          html += `<tr>
-                     <td>${item.stage}</td>
-                     <td>${item.index}</td>
-                     <td style="text-align:right;">${item.Z_upper}</td>
-                     <td style="text-align:right;">${item.Z_lower}</td>
-                     <td style="text-align:right;">${item.R_iso}</td>
-                   </tr>`;
-        }
-      });
-      html += `</table>`;
-
-      // Output isolation resistor list separately:
-      html += `<h3 style="margin-top:20px;">Isolation Resistors Between Ports</h3>`;
-      html += `<ul>`;
-      isolationList.forEach(item => {
-        html += `<li>${item.between}: ${item.R_iso} Ω</li>`;
-      });
-      html += `</ul>`;
-
-      document.getElementById('results').innerHTML = html;
+    function compute2Way() {
+      const Z0 = parseFloat(document.getElementById('Z0').value);
+      let P1 = parseFloat(document.getElementById('P1').value);
+      let P2 = parseFloat(document.getElementById('P2').value);
+      if (!(Z0 > 0)) return showError('Invalid Z₀');
+      if (!(P1>0 && P2>0)) return showError('P₁ and P₂ must be >0');
+      // normalize
+      const sum = P1 + P2;
+      P1 /= sum;  P2 /= sum;
+      const r = P1 / P2;
+      // effective Z0
+      const Z0eff = Z0;
+      // compute Z1..Z4, Rw
+      const Z1 = Z0eff * Math.sqrt(Math.pow(r,-1.5) + Math.pow(r,-0.5));
+      const Z2 = Z0eff * Math.sqrt(1 + r) * Math.pow(r,0.25);
+      const Z3 = Z0eff * Math.pow(r,-0.25);
+      const Z4 = Z0eff * Math.pow(r,0.25);
+      const Rw = Z0eff * (Math.sqrt(r) + 1/Math.sqrt(r));
+      // display
+      document.getElementById('results').innerHTML = `
+        <p><strong>Z₁:</strong> ${Z1.toFixed(2)} Ω</p>
+        <p><strong>Z₂:</strong> ${Z2.toFixed(2)} Ω</p>
+        <p><strong>Z₃:</strong> ${Z3.toFixed(2)} Ω</p>
+        <p><strong>Z₄:</strong> ${Z4.toFixed(2)} Ω</p>
+        <p><strong>R<sub>W</sub>:</strong> ${Rw.toFixed(2)} Ω</p>
+      `;
     }
-
-    // Dynamically show/hide power ratio inputs based on selected N
-    document.getElementById('numOutputs').addEventListener('change', function() {
-      const N = parseInt(this.value, 10);
-      const container = document.getElementById('powerRatiosContainer');
-      container.innerHTML = '';
-      for (let i = 1; i <= N; i++) {
-        const div = document.createElement('div');
-        div.className = 'input-group';
-        div.innerHTML = `
-          <label for="p${i}">Power Ratio P<sub>${i}</sub> (W):</label>
-          <input type="number" id="p${i}" step="any" value="1.0">
-        `;
-        container.appendChild(div);
-      }
-    });
-
-    // Initialize on load
-    window.addEventListener('load', () => {
-      document.getElementById('numOutputs').dispatchEvent(new Event('change'));
-    });
+    function showError(msg) {
+      document.getElementById('results').innerHTML =
+        `<p style="color:red;">Error: ${msg}</p>`;
+    }
   </script>
 </body>
 </html>
