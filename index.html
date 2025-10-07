@@ -1,121 +1,130 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>2-Way Unequal-Power Wilkinson Divider</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <link rel="stylesheet" href="style.css">
-</head>
+<html lang="en" data-theme="light"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2-Way Unequal-Power Wilkinson Divider</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+<link rel="stylesheet" href="style.css"></head>
 <body>
-  <div class="header">
-    <div class="header-content">
-      <div class="page-title">Wilkinson Power Divider</div>
-      <button class="theme-toggle" onclick="toggleTheme()">
-        <i class="fas fa-moon" id="theme-icon"></i>
-      </button>
-    </div>
-  </div>
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <a href="https://emlizard.github.io/main-page/" class="back-btn">
+          <i class="fas fa-arrow-left"></i>
+          Back to Calculators
+        </a>
+        <div class="page-title">Wilkinson Power Divider</div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon" id="themeIcon"></i>
+      </button>
+    </div>
+  </header>
 
-  <div class="container">
-    <div class="hero">
-      <h1>2-Way Unequal Wilkinson Power Divider</h1>
-      <p>Advanced RF Design Tool for Unequal Power Division Networks</p>
-      <div class="reference-note">Based on Pozar's Microwave Engineering and IEEE standards</div>
-    </div>
+  <div class="container">
+    <div class="hero">
+      <h1>2-Way Unequal Wilkinson Power Divider</h1>
+      <p>Advanced RF Design Tool for Unequal Power Division Networks</p>
+      <div class="reference-note">Based on Pozar's Microwave Engineering and IEEE standards</div>
+    </div>
 
-    <div class="grid grid-2">
-            <div class="card animate-in">
-        <div class="card-title">
-          <div class="card-icon">
-            <i class="fas fa-calculator"></i>
-          </div>
-          Design Parameters
-        </div>
+    <div class="grid grid-2">
+      <!-- Input Section -->
+      <div class="card animate-in">
+        <div class="card-title">
+          <div class="card-icon">
+            <i class="fas fa-calculator"></i>
+          </div>
+          Design Parameters
+        </div>
 
-        <div class="diagram-container">
-          <img src="https://emlizard.github.io/main-page/images/diagram_wilkinson3.png" alt="Wilkinson power divider schematic" style="max-width:100%;height:auto;">
-        </div>
+        <div class="diagram-container">
+          <img src="https://emlizard.github.io/main-page/images/diagram_wilkinson3.png" alt="Wilkinson power divider schematic" style="max-width:100%;height:auto;">
+        </div>
 
-        <div class="input-group">
-          <label class="input-label" for="Z0">System Impedance <span class="input-unit">(Ω)</span></label>
-          <input type="number" class="input-field" id="Z0" step="any" value="50">
-        </div>
+        <div class="input-group">
+          <label class="input-label" for="Z0">System Impedance <span class="input-unit">(Ω)</span></label>
+          <input type="number" class="input-field" id="Z0" step="any" value="50">
+        </div>
 
-        <div class="power-fraction-group">
-          <div class="input-group">
-            <label class="input-label" for="P1">Power Fraction P₁</label>
-            <input type="number" class="input-field" id="P1" step="any" value="0.5" min="0" max="1">
-          </div>
-          <div class="input-group">
-            <label class="input-label" for="P2">Power Fraction P₂</label>
-            <input type="number" class="input-field" id="P2" step="any" value="0.5" min="0" max="1">
-          </div>
-        </div>
+        <div class="power-fraction-group">
+          <div class="input-group">
+            <label class="input-label" for="P1">Power Fraction P₁</label>
+            <input type="number" class="input-field" id="P1" step="any" value="0.5" min="0" max="1">
+          </div>
+          <div class="input-group">
+            <label class="input-label" for="P2">Power Fraction P₂</label>
+            <input type="number" class="input-field" id="P2" step="any" value="0.5" min="0" max="1">
+          </div>
+        </div>
 
-        <button class="btn btn-full" onclick="compute2Way()">
-          <i class="fas fa-cogs"></i>
-          Compute Divider
-        </button>
+        <button class="btn btn-full" onclick="compute2Way()">
+          <i class="fas fa-cogs"></i>
+          Compute Divider
+        </button>
 
-        <div class="info-box">
-          <h4>Design Notes</h4>
-          <p>• Power fractions will be automatically normalized<br>
-          • All impedances are calculated for quarter-wave sections<br>
-          • Isolation resistor provides port-to-port isolation</p>
-        </div>
-      </div>
+        <div class="info-box">
+          <h4>Design Notes</h4>
+          <p>• Power fractions will be automatically normalized<br>
+          • All impedances are calculated for quarter-wave sections<br>
+          • Isolation resistor provides port-to-port isolation</p>
+        </div>
+      </div>
 
-            <div class="card animate-in">
-        <div class="card-title">
-          <div class="card-icon">
-            <i class="fas fa-chart-line"></i>
-          </div>
-          Design Results
-        </div>
+      <!-- Results Section -->
+      <div class="card animate-in">
+        <div class="card-title">
+          <div class="card-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          Design Results
+        </div>
 
-        <div id="results" class="placeholder-state">
-          Enter design parameters and click Compute to view results
-        </div>
-      </div>
-    </div>
+        <div id="results" class="placeholder-state">
+          Enter design parameters and click Compute to view results
+        </div>
+      </div>
+    </div>
 
-        <div class="card animate-in">
-      <div class="card-title">
-        <div class="card-icon">
-          <i class="fas fa-book"></i>
-        </div>
-        Design Formulas Reference
-      </div>
+    <!-- Formulas Section -->
+    <div class="card animate-in">
+      <div class="card-title">
+        <div class="card-icon">
+          <i class="fas fa-book"></i>
+        </div>
+        Design Formulas Reference
+      </div>
 
-      <div class="formula-section">
-        <h3>Unequal Split Ratio</h3>
-        <div class="formula-content">
-          <p>Let the unequal split ratio be:</p>
-          <p>\[ r = \frac{P_1}{P_2}, \quad Z_{0,\mathrm{eff}} = \sqrt{Z_0 \cdot Z_0} = Z_0 \]</p>
-        </div>
-      </div>
+      <div class="formula-section">
+        <h3>Unequal Split Ratio</h3>
+        <div class="formula-content">
+          <p>Let the unequal split ratio be:</p>
+          <p>\[ r = \frac{P_1}{P_2}, \quad Z_{0,\mathrm{eff}} = \sqrt{Z_0 \cdot Z_0} = Z_0 \]</p>
+        </div>
+      </div>
 
-      <div class="formula-section">
-        <h3>Impedance Calculations</h3>
-        <div class="formula-content">
-          <p>\[ Z_1 = Z_{0,\mathrm{eff}} \sqrt{r^{-1.5} + r^{-0.5}} \]</p>
-          <p>\[ Z_2 = Z_{0,\mathrm{eff}} \sqrt{1 + r} \, r^{0.25} \]</p>
-          <p>\[ Z_3 = Z_{0,\mathrm{eff}} \, r^{-0.25}, \quad Z_4 = Z_{0,\mathrm{eff}} \, r^{0.25} \]</p>
-        </div>
-      </div>
+      <div class="formula-section">
+        <h3>Impedance Calculations</h3>
+        <div class="formula-content">
+          <p>\[ Z_1 = Z_{0,\mathrm{eff}} \sqrt{r^{-1.5} + r^{-0.5}} \]</p>
+          <p>\[ Z_2 = Z_{0,\mathrm{eff}} \sqrt{1 + r} \, r^{0.25} \]</p>
+          <p>\[ Z_3 = Z_{0,\mathrm{eff}} \, r^{-0.25}, \quad Z_4 = Z_{0,\mathrm{eff}} \, r^{0.25} \]</p>
+        </div>
+      </div>
 
-      <div class="formula-section">
-        <h3>Isolation Resistor</h3>
-        <div class="formula-content">
-          <p>\[ R_W = Z_{0,\mathrm{eff}} \left(\sqrt{r} + \frac{1}{\sqrt{r}}\right) \]</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>
+      <div class="formula-section">
+        <h3>Isolation Resistor</h3>
+        <div class="formula-content">
+          <p>\[ R_W = Z_{0,\mathrm{eff}} \left(\sqrt{r} + \frac{1}{\sqrt{r}}\right) \]</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+
+<script src="script.js"></script></body></html>
